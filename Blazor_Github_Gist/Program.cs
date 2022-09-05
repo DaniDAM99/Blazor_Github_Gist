@@ -1,4 +1,4 @@
-using Blazor_Github_Gist.Data;
+using Blazor_Github_Gist.Services.Rest;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -7,7 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+
+builder.Services.AddHttpClient<IRestService, RestService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.github.com");
+});
+
 
 var app = builder.Build();
 

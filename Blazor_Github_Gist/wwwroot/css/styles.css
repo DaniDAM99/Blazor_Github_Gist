@@ -1,0 +1,44 @@
+﻿.icon {
+    width : 24px;
+}
+
+.header {
+    font-weight: bold;
+}
+
+.row {
+    border-bottom: 0px solid black;
+}
+
+.button {
+    background-color: transparent;
+    border: none;
+}
+
+.button:hover {
+    background-color: lightgray;
+}
+
+
+.gist_files {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    min-height: 100%;
+    margin: 0px auto;
+}
+
+.gist_file {
+    background-color: lightblue;
+    padding: 0.5em;
+    min-width: 5em;
+    min-height: 5em;
+    margin: 1em;
+    border-radius: 1em;
+}
+
+.p_span {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
