@@ -21,6 +21,8 @@
         public Owner owner { get; set; }
         public bool truncated { get; set; }
         public bool ShowFiles { get; set; } = false;
+        public List<Gist> Forks { get; set; }
+        public bool ShowForks { get; set; } = false;
     }
 
     public class User

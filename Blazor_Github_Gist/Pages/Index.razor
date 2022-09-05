@@ -9,59 +9,84 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-1">
-        <span class="header">Avatar</span>
-    </div>
-    <div class="col-1">
-        <span class="header">Owner</span>
-    </div>
-    <div class="col-5">
-        <span class="header">Description</span>
-    </div>
-    <div class="col-2">
-        <span class="header">Creation Date</span>
-    </div>
-    <div class="col-2">
-        <span class="header">Last update</span>
-    </div>
-    <div class="col-1">
-    </div>
-</div>
-@foreach(var gist in GistsList)
-{
-    <div class="row" style="margin-top: 1%;">
-        <div class="col-1">
-            <img class="icon" src="@gist.owner.avatar_url" alt="User avatar"/>
-        </div>
-        <div class="col-1">
-            @gist.owner.login
-        </div>
-        <div class="col-5">
-            @gist.description
-        </div>
-        <div class="col-2">
-            @gist.created_at.ToString("dd/MM/yyyy HH:mm")
-        </div>
-        <div class="col-2">
-            @gist.updated_at.ToString("dd/MM/yyyy HH:mm")
-        </div>
-        <div class="col-1">
-            <button class="button" @onclick="args => ShowGistFile(gist)"><span class="oi oi-file" aria-hidden="true"></span></button>
-        </div>
-        @if (gist.ShowFiles)
-        {
-            <div style="margin-left: 3vw;">
-                <div class="gist_files">
-                    @foreach (var file in gist.FileList)
-                    {
-                        <div class="gist_file">
-                            <p class="badge bg-secondary p_span">@file.language</p>
-                            <p style="text-align: center;">@file.filename</p>
-                        </div>
-                    }
+<div class="gist_container">    
+    @foreach(var gist in GistsList)
+    {
+        <div class="gist_item">
+            <div class="gist_img_container">
+                <img class="icon" src="@gist.owner.avatar_url" alt="User avatar" />
+                <span class="username">@gist.owner.login</span>
+            </div>
+            <div class="gist_info_container">
+                <div>
+                    <div>
+                        <p><span>Description: </span>@gist.description</p>
+                        <p><span>Creation date: </span>@gist.created_at.ToString("dd/MM/yyyy HH:mm")</p>
+                        <p><span>Last update: </span>@gist.updated_at.ToString("dd/MM/yyyy HH:mm")</p>
+                    </div>
+                    <div>
+                        <button class="button" @onclick="args => ShowGistFile(gist)"><span class="oi oi-file" aria-hidden="true"></span></button>
+
+                        <button class="button" @onclick="args => GetForksList(gist)"><span class="oi oi-fork" aria-hidden="true"></span></button>
+                    </div>
                 </div>
             </div>
-        }
-    </div>
-}
+
+
+            @if (gist.ShowFiles)
+            {
+                <div>
+                    <div class="gist_files">
+                        @foreach (var file in gist.FileList)
+                        {
+                            <div class="gist_file">
+                                <p class="badge bg-secondary p_span">@file.language</p>
+                                <p>@file.filename</p>
+                                <button class="btn-sm btn-primary" @onclick="args => ShowFileData(file)">Show file data</button>
+                            </div>
+                            @if (file.showData)
+                            {
+                                <textarea disabled class="gist_file_data">
+                                    @file.data
+                                </textarea>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+
+
+            @if (gist.ShowForks)
+            {
+                <div>
+                    <div class="forks">
+                        @{
+                            if (gist.Forks != null)
+                            {
+                                var num_forks = gist.Forks.Count > 3 ? 3 : gist.Forks.Count;
+                                if (gist.Forks.Count == 0)
+                                {
+                                    <p>No data</p>
+                                }
+                                else
+                                {
+                                    for (var i = 0; i < num_forks; i++)
+                                    {
+                                        var fork = gist.Forks[i];
+                                        if (fork != null)
+                                        {
+                                            <div class="fork">
+                                                <img class="icon" src="@fork.owner.avatar_url" alt="User avatar" />
+                                                <p style="text-align: center;">@fork.owner.login</p>
+                                            </div>
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

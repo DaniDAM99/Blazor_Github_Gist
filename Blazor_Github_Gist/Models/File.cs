@@ -9,5 +9,7 @@ namespace Blazor_Github_Gist.Models
         public string language { get; set; } = string.Empty;
         public string raw_url { get; set; } = string.Empty;
         public int size { get; set; }
+        public bool showData { get; set; } = false;
+        public string? data { get; set; } = null;
     }
 }

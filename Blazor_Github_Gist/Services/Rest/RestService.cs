@@ -18,33 +18,54 @@ namespace Blazor_Github_Gist.Services.Rest
         {
 
             _client.DefaultRequestHeaders.Add("User-Agent", "DaniDAM99");
-            //var response = await _client.GetAsync($"users/{user}/gists");
+            var content = await GetStringAsync($"users/{user}/gists");
 
-            //var content = await response.Content.ReadAsStringAsync();
-            var content = ReadJson();
+            List<Gist> gists_list = new List<Gist>();
 
-            List<Gist> gists_list = JsonConvert.DeserializeObject<List<Gist>>(content);
+            if(!string.IsNullOrEmpty(content))
+                gists_list = JsonConvert.DeserializeObject<List<Gist>>(content);
 
             if (gists_list == null)
                 gists_list = new List<Gist>();
 
-             GetGistFiles(content, gists_list);
-
-                                              
+            GetGistFiles(content, gists_list);
 
             return gists_list;
         }
 
-        private string ReadJson()
+        public async Task<List<Gist>> GetForks(string id)
         {
-            using (StreamReader r = new StreamReader("../gists.json"))
-            {
-                string json = r.ReadToEnd();
+            _client.DefaultRequestHeaders.Add("User-Agent", "DaniDAM99");
+            var json = await GetStringAsync($"gists/{id}/forks");
+            List<Gist> forks = new List<Gist>();
 
-                return json;
-            }
+            if(!string.IsNullOrEmpty(json))
+                forks = JsonConvert.DeserializeObject<List<Gist>>(json);
+
+            if(forks == null)
+                forks = new List<Gist>();
+
+            return forks;
         }
 
+        public async Task<string> GetFileData(string url)
+        {
+            HttpClient client = new HttpClient();
+            var response = await client.GetAsync(url);
+            var content = await response.Content.ReadAsStringAsync();
+            return content;
+        }
+
+        private async Task<string> GetStringAsync(string url)
+        {
+            var response = await _client.GetAsync(url);
+            var content = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+                return "";
+
+            return content;
+        }
+        
         // Get the gist files from the json and insert them in the Gist list of the object
         private void GetGistFiles(string json, List<Gist> gistList)
         {
