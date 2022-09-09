@@ -17,7 +17,7 @@ namespace Blazor_Github_Gist.Services.Rest
         public async Task<List<Gist>> GetGist(string user)
         {
 
-            _client.DefaultRequestHeaders.Add("User-Agent", "DaniDAM99");
+            _client.DefaultRequestHeaders.Add("User-Agent", "GITHUB_USERNAME");
             var content = await GetStringAsync($"users/{user}/gists");
 
             List<Gist> gists_list = new List<Gist>();
